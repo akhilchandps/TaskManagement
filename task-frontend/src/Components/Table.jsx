@@ -20,6 +20,20 @@ useEffect(()=>{
 getTask();
 },[])
 
+
+const handleDelete = async(id)=>{
+    const res= await fetch(`http://localhost:4000/deleteTask/${id}`,{
+        method:"DELETE"
+    })
+    console.log(res);
+    const data = await res.json()
+    console.log(data);
+ 
+    
+    // title,description,status,priority,createdAt
+}
+
+
   return (
     <div>
           <table className="border border-2 m-auto bg-[rgba(255,255,255,0.8)] mt-20 shadow-md shadow-black-600 ">
@@ -51,7 +65,7 @@ getTask();
  
                          <td className="text-center p-5 border flex justify-between">
                              <Link to={`/UpdateTask/${item._id}`} className='bg-orange-600 text-white p-1 mr-3' >Update</Link>
-                             {/* <button onClick={()=>handleDelete(item._id)} className='bg-rose-700 text-white p-1 mr-3'>Delete</button> */}
+                             <button onClick={()=>handleDelete(item._id)} className='bg-rose-700 text-white p-1 mr-3'>Delete</button>
                            </td>
                      </tr>
                 ))):(

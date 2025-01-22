@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-
+import { useNavigate, useParams } from 'react-router-dom'
 const Update = () => {
+
   const [title,setTitle] = useState("")
     const [description,setDescription] = useState("")
     const [status,setStatus] = useState("")
     const [priority,setPriority] = useState("")
-     const [createdAt,setCreatedAt] = useState("")
+    const [createdAt,setCreatedAt] = useState("")
 
+    const navigate = useNavigate()
 const {id} = useParams();
 console.log(id);
 
@@ -32,12 +33,41 @@ const getATask = async()=>{
 
 useEffect(()=>{
 getATask();
-},[])
+},[id])
 
 
+
+const handleUpdate = async(e)=>{
+e.preventDefault();
+const updatedTask={
+    title,
+    description,
+    status,
+    priority,
+    createdAt
+}
+    const res = await fetch(`http://localhost:4000/updateTask/${id}`,{
+        method:"PUT",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify(updatedTask)
+    })
+
+    console.log(res);
+    const data = await res.json()
+    console.log(data);
+
+    if(res.ok){
+        alert("Task updated")
+        navigate('/')
+    }
+    
+    
+
+
+}
   return (
     <div>
-            <form className='bg-slate-400 p-5 w-96 m-auto' >
+            <form className='bg-slate-400 p-5 w-96 m-auto' onSubmit={handleUpdate} >
         <label htmlFor="">title</label>
         <div>
             <input type="text" value={title} placeholder='title' className='w-full p-2' onChange={(e)=>setTitle(e.target.value)}/>
@@ -68,7 +98,7 @@ getATask();
 
 
         <div className='text-center'>
-<button className='bg-black text-white p-2'>Add</button>        
+<button className='bg-black text-white p-2'>Update</button>        
 </div>
       </form>
     </div>
